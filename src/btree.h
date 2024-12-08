@@ -50,10 +50,10 @@ void binaryTree<T>::freeNodeLevelCheck(int height, std::vector<Node<T>*>* v, Nod
         if (node->left == nullptr || node->right == nullptr) v->push_back(node);
     }
     else if (node->left != nullptr) {
-        this->freeNodeLevelCheck(height, v, node->left, level+1);
+        freeNodeLevelCheck(height, v, node->left, level+1);
     }
     else if (node->right != nullptr) {
-        this->freeNodeLevelCheck(height, v, node->right, level+1);
+        freeNodeLevelCheck(height, v, node->right, level+1);
     }
 }
 
@@ -65,7 +65,7 @@ bool binaryTree<T>::insertRandNode(int height, T value) {
     Node<T>* freeNode;
     Node<T>* newNode = new Node<T>(value);
     std::vector<Node<T>*> v;
-    this->freeNodeLevelCheck(height, &v, root);
+    freeNodeLevelCheck(height, &v, root);
     if (!v.empty()) {
         freeNode = v.at(engine() % v.size());
         if (freeNode->left == nullptr && freeNode->right == nullptr) {
@@ -96,7 +96,7 @@ void binaryTree<T>::printPreorder(Node<T>* node) const {
 
 template <typename T>
 void binaryTree<T>::printPreorderFromRoot() const {
-    this->printPreorder(root);
+    printPreorder(root);
 }
 
 #endif
