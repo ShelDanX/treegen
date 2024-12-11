@@ -1,4 +1,5 @@
 #include "gentree.h"
+#include <fstream>
 
 /*
     Fast power of 2
@@ -60,7 +61,7 @@ bool genTree::generate(int height, int amount) {
         return false;
     }    
     while (remain > 0) {
-        int randHeight = engine()%(height-2)+1;
+        int randHeight = engine()%(height-1);
         if (insertRandNode(randHeight, '0')) {
             remain--;
         }
@@ -72,4 +73,21 @@ bool genTree::generate(int height, int amount) {
     }
     generateLeaves(&letters, root);
     return true;
+}
+
+void genTree::print(const std::string& prefix, const Node<char>* node, bool isLeft) {
+    if (node != nullptr) {
+        std::cout << prefix;
+        std::cout << (isLeft ? "ÃÄÄ" : "ÀÄÄ");
+        std::cout << node->data << std::endl;
+        print(prefix + (isLeft ? "|   " : "    "), node->left, true);
+        print(prefix + (isLeft ? "|   " : "    "), node->right, false);
+    }
+}
+
+/*
+    Prints generated tree
+*/
+void genTree::print() {
+    print("", root, false);
 }

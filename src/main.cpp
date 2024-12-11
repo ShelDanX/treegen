@@ -1,21 +1,16 @@
-#include <SFML/Graphics.hpp>
+#include "gentree.h"
+#include <iostream>
+
+using namespace std;
 
 int main()
 {
-    auto window = sf::RenderWindow({1920u, 1080u}, "CMake SFML Project");
-    window.setFramerateLimit(144);
-
-    while (window.isOpen())
-    {
-        for (auto event = sf::Event(); window.pollEvent(event);)
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
-        }
-
-        window.clear();
-        window.display();
-    }
+    genTree gtree;
+    int amount, height;
+    cout << "Height of tree: ";
+    cin >> height;
+    cout << "Amount of elements: ";
+    cin >> amount;
+    gtree.generate(height, amount);
+    gtree.print();
 }
