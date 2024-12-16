@@ -91,3 +91,61 @@ void genTree::print(const std::string& prefix, const Node<char>* node, bool isLe
 void genTree::print() {
     print("", root, false);
 }
+
+void genTree::printTreeCode(Node<char>* node, std::string prefix) {
+    std::vector<char> ranges;
+
+    // Left child tree printing
+    getLeaves(&ranges, node->left);
+    std::cout << prefix << "if (";
+    if (ranges.size() > 1) {
+        for (int i = 0; i < ranges.size(); i++) {
+            std::cout << "(x >= " << ranges[i] << " && x < " << char(ranges[i]+1) << ")";
+            if (i != ranges.size()-1)
+                std::cout << " or ";
+        }
+        std::cout << ") {" << std::endl;
+        printTreeCode(node->left, prefix+TAB);
+    }
+    else {
+        std::cout << "x >= " << ranges[0] << " && x < " << char(ranges[0]+1);
+        std::cout << ") {" << std::endl;
+        std::cout << prefix+TAB << "cout << x << \" \" << " << ranges[0] << " << endl;" << std::endl;
+    }
+    std::cout << prefix << "}" << std::endl;
+
+    // Right child tree printing
+    ranges.clear();
+    getLeaves(&ranges, node->right);
+    std::cout << prefix << "else {" << std::endl;
+    if (ranges.size() > 1) {
+        printTreeCode(node->right, prefix+TAB);
+    }
+    else {
+        std::cout << prefix+TAB << "cout << x << \" \" << " << ranges[0] << " << endl;" << std::endl;
+    }
+    std::cout << prefix << "}" << std::endl;
+    
+}
+
+void genTree::printCode() {
+    std::cout << "#include <iostream>" << std::endl;
+    std::cout << "using namespace std;" << std::endl;
+    std::cout << "int main(void) {" << std::endl;
+    std::cout << "  const int INTERVAL = " << INTERVAL << ";" << std::endl;
+    std::vector<char> ranges;
+    getLeaves(&ranges);
+    std::sort(ranges.begin(), ranges.end());
+    for (int i = 1; i < ranges.size(); i++) {
+        int space = (100+1+100)/ranges.size();
+        std::cout << "  const int " << ranges[i] << " = " << i*space - 100 << ";" << std::endl;
+    }
+    std::cout << "  for (int x = " << -INTERVAL;
+    std::cout << "; x < " << INTERVAL <<  "; x++) {" << std::endl;
+
+    printTreeCode(root, "    ");
+
+    std::cout << "  }" << std::endl;
+    std::cout << "  return 0;" << std::endl;
+    std::cout << "}" << std::endl;
+}

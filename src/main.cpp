@@ -9,8 +9,14 @@ int main()
     int amount, height;
     cout << "Height of tree: ";
     cin >> height;
-    cout << "Amount of elements: ";
+    cout << "Amount of elements (nodes): ";
     cin >> amount;
-    gtree.generate(height, amount);
-    gtree.print();
+    if (gtree.generate(height, amount)) {
+        gtree.print();
+        cout << endl;
+        gtree.printCode();
+    }
+    else {
+        cout << "Failed to create tree with these parameters" << endl;
+    }   
 }

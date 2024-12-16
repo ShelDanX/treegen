@@ -27,6 +27,8 @@ class binaryTree {
     protected:
     std::mt19937 engine;
     void freeNodeLevelCheck(int height, std::vector<Node<T>*>* v, Node<T>* node, int level = 0);
+    void getLeaves(std::vector<T>* leaves);
+    void getLeaves(std::vector<T>* leaves, Node<T>* node);
 
     public:
     Node<T>* root;
@@ -97,6 +99,24 @@ void binaryTree<T>::printPreorder(Node<T>* node) const {
 template <typename T>
 void binaryTree<T>::printPreorderFromRoot() const {
     printPreorder(root);
+}
+
+template <typename T>
+void binaryTree<T>::getLeaves(std::vector<T>* leaves, Node<T>* node) {
+    if (node->left != nullptr) {
+        getLeaves(leaves, node->left);
+    }
+    if (node->right != nullptr) {
+        getLeaves(leaves, node->right);
+    }
+    if (node->left == nullptr && node->right == nullptr) {
+        leaves->push_back(node->data);
+    }
+}
+
+template <typename T>
+void binaryTree<T>::getLeaves(std::vector<T>* leaves) {
+    getLeaves(leaves, root);
 }
 
 #endif
