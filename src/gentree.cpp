@@ -92,7 +92,7 @@ void genTree::print() {
     print("", root, false);
 }
 
-void genTree::printTreeCode(Node<char>* node, std::string prefix) {
+void genTree::printTreeCode(Node<char>* node, std::string prefix, char last) {
     std::vector<char> ranges;
 
     // Left child tree printing
@@ -100,15 +100,25 @@ void genTree::printTreeCode(Node<char>* node, std::string prefix) {
     std::cout << prefix << "if (";
     if (ranges.size() > 1) {
         for (int i = 0; i < ranges.size(); i++) {
-            std::cout << "(x >= " << ranges[i] << " && x < " << char(ranges[i]+1) << ")";
+            if (ranges[i] != last && ranges[i] != 'A')
+                std::cout << "(x >= " << ranges[i] << " && x < " << char(ranges[i]+1) << ")";
+            else if (ranges[i] == last)
+                std::cout << "(x >= " << ranges[i] << ")";
+            else 
+                std::cout << "(x < B)";
             if (i != ranges.size()-1)
                 std::cout << " or ";
         }
         std::cout << ") {" << std::endl;
-        printTreeCode(node->left, prefix+TAB);
+        printTreeCode(node->left, prefix+TAB, last);
     }
     else {
-        std::cout << "x >= " << ranges[0] << " && x < " << char(ranges[0]+1);
+        if (ranges[0] != last && ranges[0] != 'A')
+            std::cout << "x >= " << ranges[0] << " && x < " << char(ranges[0]+1);
+        else if (ranges[0] == last)
+            std::cout << "x >= " << ranges[0];
+        else 
+            std::cout << "x < B";
         std::cout << ") {" << std::endl;
         std::cout << prefix+TAB << "cout << x << \" \" << " << ranges[0] << " << endl;" << std::endl;
     }
@@ -119,7 +129,7 @@ void genTree::printTreeCode(Node<char>* node, std::string prefix) {
     getLeaves(&ranges, node->right);
     std::cout << prefix << "else {" << std::endl;
     if (ranges.size() > 1) {
-        printTreeCode(node->right, prefix+TAB);
+        printTreeCode(node->right, prefix+TAB, last);
     }
     else {
         std::cout << prefix+TAB << "cout << x << \" \" << " << ranges[0] << " << endl;" << std::endl;
@@ -142,8 +152,8 @@ void genTree::printCode() {
     }
     std::cout << "  for (int x = " << -INTERVAL;
     std::cout << "; x < " << INTERVAL <<  "; x++) {" << std::endl;
-
-    printTreeCode(root, "    ");
+    
+    printTreeCode(root, "    ", ranges.back());
 
     std::cout << "  }" << std::endl;
     std::cout << "  return 0;" << std::endl;

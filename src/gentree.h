@@ -12,7 +12,7 @@ class genTree: public binaryTree<char> {
     private:
     void generateLeaves(std::vector<char>* letters, Node<char>* node);
     void print(const std::string& prefix, const Node<char>*node, bool isLeft);
-    void printTreeCode(Node<char>* node, std::string prefix);
+    void printTreeCode(Node<char>* node, std::string prefix, char last);
 
     public:
     genTree(): binaryTree<char>('0'){}
